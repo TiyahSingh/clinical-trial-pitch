@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clinical Trial — Questions and rating</title>
+  <meta name="description" content="Rate Clinical Trial, read the frequently asked questions, and send your own question to the team.">
+  <meta name="theme-color" content="#1f5f96">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1b2b3a;
+      --muted: #5d6e7e;
+      --line: #e4edf4;
+      --blue: #2f7eb8;
+      --blue-d: #1f5f96;
+      --soft: #f4f8fb;
+      --bg: #e7eef3;
+      --star: #f5b301;
+      --ok: #1f8a4c;
+      --shadow: 0 8px 22px rgba(23, 52, 78, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      font-size: 17px;
+      line-height: 1.45;
+    }
+    .sheet {
+      width: min(440px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 0 40px rgba(20, 40, 60, 0.08);
+    }
+    .banner {
+      height: 168px;
+      background: #d7e7f2 url("assets/clinic.jpg") center 42% / cover no-repeat;
+      position: relative;
+    }
+    .banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(18, 52, 84, 0.28), rgba(18, 52, 84, 0.05));
+    }
+    .logo-ring {
+      width: 118px;
+      height: 118px;
+      margin: -58px auto 0;
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 10px 24px rgba(16, 42, 68, 0.18);
+      display: grid;
+      place-items: center;
+      padding: 10px 8px 8px;
+    }
+    .logo-ring img { width: 100%; height: auto; display: block; }
+    h1 {
+      margin: 12px 24px 0;
+      text-align: center;
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      margin: 8px 28px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 16.5px;
+    }
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin: 14px 16px 4px;
+      padding: 0;
+      list-style: none;
+    }
+    .pills li {
+      background: var(--soft);
+      color: var(--blue-d);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+      padding: 16px 16px 8px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 0;
+      background: var(--blue);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 1px 2px rgba(16, 42, 68, 0.12);
+      cursor: pointer;
+    }
+    .btn:hover { background: var(--blue-d); }
+    .btn.ghost {
+      background: #fff;
+      color: var(--blue-d);
+      border: 1.5px solid #d5e4f0;
+      box-shadow: none;
+    }
+    .btn.ghost:hover { background: var(--soft); }
+    .btn:focus-visible, .star:focus-visible, .chip:focus-visible, summary:focus-visible, .ask:focus-visible {
+      outline: 3px solid #8ec4ea;
+      outline-offset: 2px;
+    }
+    section { padding: 8px 16px 4px; }
+    .block {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .kicker {
+      margin: 0 0 4px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h2 { margin: 0 0 8px; font-size: 22px; letter-spacing: -0.02em; }
+    .roles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .roles li {
+      background: var(--soft);
+      border-radius: 12px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      column-gap: 8px;
+      align-items: center;
+    }
+    .roles img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      grid-row: span 2;
+    }
+    .roles strong { display: block; color: var(--blue-d); font-size: 15px; }
+    .roles span { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
+    .with-mark { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .with-mark h2 { margin: 0; }
+    .with-mark img, .faq-head img, .foot-mark {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+    .foot-mark { display: block; margin: 0 auto 8px; }
+    .faq-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 4px 2px 8px;
+    }
+    .faq-head h2 { margin: 0; font-size: 22px; letter-spacing: -0.02em; text-transform: none; color: var(--ink); }
+    .stars { display: flex; gap: 4px; margin: 6px 0 8px; }
+    .star {
+      width: 46px;
+      height: 46px;
+      border: 0;
+      background: transparent;
+      color: #d5dde4;
+      font-size: 34px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+    .star.on { color: var(--star); }
+    .avg { margin: 0 0 10px; color: var(--muted); font-size: 14.5px; min-height: 1.2em; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .chip {
+      border: 1.5px solid #d5e4f0;
+      background: #fff;
+      color: var(--blue-d);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .chip.on { background: #e7f3fb; border-color: var(--blue); }
+    label { display: block; font-weight: 700; font-size: 14px; margin: 0 0 6px; }
+    input, textarea {
+      width: 100%;
+      border: 1.5px solid #d5e4f0;
+      border-radius: 10px;
+      padding: 12px;
+      font: inherit;
+      color: var(--ink);
+      background: #fff;
+      margin-bottom: 12px;
+    }
+    textarea { min-height: 96px; resize: vertical; }
+    .hint { margin: -6px 0 12px; color: var(--muted); font-size: 13.5px; }
+    .thanks {
+      display: none;
+      text-align: center;
+      padding: 12px 8px 4px;
+    }
+    .thanks.show { display: block; }
+    .check {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      background: #e7f7ee;
+      color: var(--ok);
+      display: grid;
+      place-items: center;
+      font-size: 30px;
+      font-weight: 700;
+    }
+    .form-hide { display: none; }
+    .faq { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+    details { border-bottom: 1px solid var(--line); background: #fff; }
+    details:last-child { border-bottom: 0; }
+    summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 700;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--blue); font-size: 22px; font-weight: 700; line-height: 1; }
+    details[open] summary::after { content: "–"; }
+    details p { margin: 0; padding: 0 16px 14px; color: #314556; }
+    .live-item {
+      border-top: 1px solid var(--line);
+      padding: 10px 0;
+    }
+    .live-item:first-child { border-top: 0; padding-top: 0; }
+    .who { margin: 0; font-size: 13px; color: var(--muted); }
+    .q { margin: 2px 0 0; }
+    .empty { margin: 0; color: var(--muted); }
+    footer {
+      padding: 8px 20px 28px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    footer a { color: var(--blue-d); }
+    .err { color: #a12626; font-size: 14px; margin: 8px 0 0; }
+    body.inbox .only-pitch { display: none; }
+    body.inbox .sheet { max-width: 720px; }
+    body.inbox .live-board { font-size: 20px; }
+    @media (min-width: 800px) {
+      body { padding: 28px 0; }
+      .sheet { min-height: calc(100vh - 56px); border-radius: 18px; overflow: hidden; }
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <header class="only-pitch">
+      <div class="banner" role="img" aria-label="The clinic waiting room in Clinical Trial"></div>
+      <div class="logo-ring">
+        <img src="assets/logo-mask.png" alt="Clinical Trial logo, a surgical mask with a stethoscope forming the letter C">
+      </div>
+      <h1>Clinical Trial</h1>
+      <p class="lede">A stylised 3D clinic simulation about keeping a South African public hospital running when staff, medicine, and time are all short.</p>
+      <ul class="pills">
+        <li>Manager</li>
+        <li>Doctor</li>
+        <li>Nurse</li>
+        <li>Janitor</li>
+      </ul>
+      <nav class="actions" aria-label="Page sections">
+        <a class="btn" href="#rate">Rate the game</a>
+        <a class="btn" href="#ask">Ask your own question</a>
+        <a class="btn ghost" href="#faq">Frequently asked questions</a>
+        <a class="btn ghost" href="https://github.com/LJ-vdZ/XBCGD7312_Clinical-Trial">Open the group prototype</a>
+      </nav>
+    </header>
+
+    <section class="only-pitch" aria-labelledby="inside-title">
+      <div class="block">
+        <p class="kicker">Inside the build</p>
+        <div class="with-mark">
+          <h2 id="inside-title">Four jobs, one clinic</h2>
+          <img src="assets/logo-jar.png" alt="">
+        </div>
+        <ul class="roles">
+          <li><img src="assets/logo-bottle.png" alt=""><strong>Manager</strong><span>Buys medication and watches the budget.</span></li>
+          <li><img src="assets/logo-rx.png" alt=""><strong>Doctor</strong><span>Treats patients so they improve.</span></li>
+          <li><img src="assets/logo-plaster.png" alt=""><strong>Nurse</strong><span>Assesses patients and sorts medicine.</span></li>
+          <li><img src="assets/logo-pill.png" alt=""><strong>Janitor</strong><span>Collects rubbish with a cleaning cart.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="rate" aria-labelledby="rate-title">
+      <div class="block">
+        <p class="kicker">Feedback</p>
+        <div class="with-mark">
+          <h2 id="rate-title">Rate the game</h2>
+          <img src="assets/logo-mask.png" alt="">
+        </div>
+        <p class="avg" id="avg">No ratings yet. Yours can be the first.</p>
+        <form id="rate-form">
+          <div class="stars" role="radiogroup" aria-label="Star rating">
+            <button type="button" class="star" data-star="1" role="radio" aria-checked="false" aria-label="1 star">★</button>
+            <button type="button" class="star" data-star="2" role="radio" aria-checked="false" aria-label="2 stars">★</button>
+            <button type="button" class="star" data-star="3" role="radio" aria-checked="false" aria-label="3 stars">★</button>
+            <button type="button" class="star" data-star="4" role="radio" aria-checked="false" aria-label="4 stars">★</button>
+            <button type="button" class="star" data-star="5" role="radio" aria-checked="false" aria-label="5 stars">★</button>
+          </div>
+          <p class="hint" id="star-label">Tap a star to score the game.</p>
+          <div class="chips" id="topics">
+            <button type="button" class="chip" data-topic="Gameplay">Gameplay</button>
+            <button type="button" class="chip" data-topic="The four roles">The four roles</button>
+            <button type="button" class="chip" data-topic="The message">The message</button>
+            <button type="button" class="chip" data-topic="Look and sound">Look and sound</button>
+            <button type="button" class="chip" data-topic="How clear it is">How clear it is</button>
+          </div>
+          <label for="comment">Comment, if you want one</label>
+          <textarea id="comment" maxlength="280" placeholder="What should the team know?"></textarea>
+          <button class="btn" type="submit">Submit rating</button>
+          <p class="err" id="rate-err" hidden></p>
+        </form>
+        <div class="thanks" id="rate-thanks">
+          <div class="check" aria-hidden="true">✓</div>
+          <h2>Rating received</h2>
+          <p>Thank you. It is on the team’s board with the other scores.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="only-pitch" id="faq" aria-labelledby="faq-title">
+      <div class="faq-head">
+        <h2 id="faq-title">Frequently asked questions</h2>
+        <img src="assets/logo-pill.png" alt="">
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>What is Clinical Trial?</summary>
+          <p>It is a stylised 3D serious game set in a struggling South African public clinic. You do not build or expand the hospital. You try to keep it functioning with limited staff, supplies, and time.</p>
+        </details>
+        <details>
+          <summary>Why make this as a game?</summary>
+          <p>Our research used a Statistics South Africa figure that about 84% of South Africans rely on public healthcare. Overcrowding, understaffing, medicine shortages, sanitation, infrastructure trouble, and load shedding feed into one another. The game lets you feel that cycle instead of only reading it.</p>
+        </details>
+        <details>
+          <summary>Who do I play as?</summary>
+          <p>You switch between the Manager, Doctor, Nurse, and Janitor from anywhere in the clinic. The camera moves to the character you pick. No single role can keep the hospital going alone.</p>
+        </details>
+        <details>
+          <summary>What does each role actually do?</summary>
+          <p>The Manager buys medication and deals with the budget. The Doctor treats patients, and that treatment improves them. The Nurse assesses patients, sorts medication by colour, and during an outbreak marks who is infected. The Janitor collects rubbish and moves it with a mobile cleaning cart.</p>
+        </details>
+        <details>
+          <summary>When do the timers start?</summary>
+          <p>Each character has a timer, but a minigame countdown starts only when you interact with the prop. Walking up to it is not enough. The round ends when every character timer runs out.</p>
+        </details>
+        <details>
+          <summary>How is the nurse different from the doctor?</summary>
+          <p>A nurse assessment can go either way. If the patient has not improved, you switch to the doctor. The Treat button stays locked until the patient is marked critical or not critical. Medicine has to be bought by the manager before the nurse can unpack it and sort the shelf.</p>
+        </details>
+        <details>
+          <summary>What can go wrong mid-round?</summary>
+          <p>Crises arrive at random. Corruption cuts the budget. Theft cuts supplies. An infection outbreak drops hygiene, comfort, and morale. An outside disaster, such as a bus accident or a building collapse, brings more patients. Stat bars turn orange, then red. Hitting zero funds does not end the game on the spot. You get a chance to recover.</p>
+        </details>
+        <details>
+          <summary>Is it graphic?</summary>
+          <p>No. The low-poly look is deliberate. The project is about systems and pressure, not graphic imagery or stereotypes of patients and staff.</p>
+        </details>
+        <details>
+          <summary>Who is it for?</summary>
+          <p>Teenagers, young adults, students, and players who like simulation or management games, including people who would not usually sit down with a healthcare report.</p>
+        </details>
+        <details>
+          <summary>What happens when the game ends?</summary>
+          <p>An end panel links to non-profit sites about the issues in the game, so a player can read further or support real work after the round.</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="ask" aria-labelledby="ask-title">
+      <div class="block">
+        <p class="kicker">This session is online</p>
+        <div class="with-mark">
+          <h2 id="ask-title">Ask your own question</h2>
+          <img src="assets/logo-bottle.png" alt="">
+        </div>
+        <p class="hint">We cannot take a hand in the room. Send it here and it shows on the team’s board.</p>
+        <form id="ask-form">
+          <label for="name">Name, if you want it shown</label>
+          <input id="name" maxlength="32" autocomplete="name" placeholder="Optional">
+          <label for="question">Your question</label>
+          <textarea id="question" maxlength="400" required placeholder="Ask the team anything about the game."></textarea>
+          <button class="btn" type="submit">Send question</button>
+          <p class="err" id="ask-err" hidden></p>
+        </form>
+        <div class="thanks" id="ask-thanks">
+          <div class="check" aria-hidden="true">✓</div>
+          <h2>Question sent</h2>
+          <p>It is on the board below. The team can read it during the presentation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="live-board" aria-labelledby="live-title">
+      <div class="block">
+        <p class="kicker">Live board</p>
+        <div class="with-mark">
+          <h2 id="live-title">Questions from the room</h2>
+          <img src="assets/logo-rx.png" alt="">
+        </div>
+        <div id="questions"><p class="empty">Nothing yet. Be the first to ask.</p></div>
+      </div>
+      <div class="block" id="comment-board">
+        <p class="kicker">Ratings</p>
+        <div class="with-mark">
+          <h2>Comments with the scores</h2>
+          <img src="assets/logo-plaster.png" alt="">
+        </div>
+        <div id="comments"><p class="empty">Comments appear here after someone rates the game.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <img class="foot-mark" src="assets/logo-jar.png" alt="">
+      <p>Clinical Trial · serious game about a South African public clinic<br>Tiyah, Jacques, Jamie, and Lazjessicah</p>
+      <p><a href="#inbox" id="inbox-link">Presenter board</a></p>
+    </footer>
+  </main>
+  <script>
+    const TOPIC = "ct-qna-live-k4p8n2";
+    const ENDPOINT = "https://ntfy.sh/" + TOPIC;
+    const items = new Map();
+    let stars = 0;
+
+    const starButtons = [...document.querySelectorAll(".star")];
+    const starLabel = document.getElementById("star-label");
+    const words = ["", "Needs work", "Uneven", "Solid", "Strong", "Excellent"];
+
+    function paintStars() {
+      starButtons.forEach((button) => {
+        const on = Number(button.dataset.star) <= stars;
+        button.classList.toggle("on", on);
+        button.setAttribute("aria-checked", String(Number(button.dataset.star) === stars));
+      });
+      starLabel.textContent = stars ? words[stars] + " · " + stars + " of 5" : "Tap a star to score the game.";
+    }
+
+    starButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        stars = Number(button.dataset.star);
+        paintStars();
+      });
+    });
+
+    document.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => chip.classList.toggle("on"));
+    });
+
+    function selectedTopics() {
+      return [...document.querySelectorAll(".chip.on")].map((chip) => chip.dataset.topic);
+    }
+
+    async function publish(payload) {
+      const response = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain", "Cache": "12h" },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error("Could not reach the board.");
+    }
+
+    function showThanks(formId, thanksId) {
+      document.getElementById(formId).classList.add("form-hide");
+      document.getElementById(thanksId).classList.add("show");
+    }
+
+    document.getElementById("rate-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const error = document.getElementById("rate-err");
+      error.hidden = true;
+      if (!stars) {
+        error.hidden = false;
+        error.textContent = "Choose a star rating first.";
+        return;
+      }
+      const payload = {
+        v: 1,
+        kind: "rating",
+        id: crypto.randomUUID(),
+        stars,
+        topics: selectedTopics(),
+        comment: document.getElementById("comment").value.trim().slice(0, 280),
+        at: Date.now()
+      };
+      try {
+        await publish(payload);
+        remember(payload);
+        render();
+        showThanks("rate-form", "rate-thanks");
+      } catch (err) {
+        error.hidden = false;
+        error.textContent = "The rating did not send. Check your connection and try again.";
+      }
+    });
+
+    document.getElementById("ask-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const error = document.getElementById("ask-err");
+      error.hidden = true;
+      const text = document.getElementById("question").value.trim().slice(0, 400);
+      if (!text) return;
+      const name = document.getElementById("name").value.trim().slice(0, 32) || "Anonymous";
+      const payload = { v: 1, kind: "question", id: crypto.randomUUID(), name, text, at: Date.now() };
+      try {
+        await publish(payload);
+        remember(payload);
+        render();
+        showThanks("ask-form", "ask-thanks");
+      } catch (err) {
+        error.hidden = false;
+        error.textContent = "The question did not send. Check your connection and try again.";
+      }
+    });
+
+    function remember(payload) {
+      if (payload && payload.id) items.set(payload.id, payload);
+    }
+
+    function render() {
+      const all = [...items.values()].sort((a, b) => b.at - a.at);
+      const ratings = all.filter((item) => item.kind === "rating" && item.stars);
+      const questions = all.filter((item) => item.kind === "question" && item.text);
+      const avg = document.getElementById("avg");
+      if (ratings.length) {
+        const mean = ratings.reduce((sum, item) => sum + Number(item.stars), 0) / ratings.length;
+        avg.textContent = "Room average " + mean.toFixed(1) + " from " + ratings.length + (ratings.length === 1 ? " rating." : " ratings.");
+      }
+      const qBox = document.getElementById("questions");
+      qBox.replaceChildren();
+      if (!questions.length) {
+        const p = document.createElement("p");
+        p.className = "empty";
+        p.textContent = "Nothing yet. Be the first to ask.";
+        qBox.appendChild(p);
+      } else {
+        questions.forEach((item) => qBox.appendChild(line(item.name, item.text, item.at)));
+      }
+      const cBox = document.getElementById("comments");
+      const withNotes = ratings.filter((item) => item.comment);
+      cBox.replaceChildren();
+      if (!withNotes.length) {
+        const p = document.createElement("p");
+        p.className = "empty";
+        p.textContent = "Comments appear here after someone rates the game.";
+        cBox.appendChild(p);
+      } else {
+        withNotes.forEach((item) => {
+          const topic = item.topics && item.topics.length ? " · " + item.topics.join(", ") : "";
+          cBox.appendChild(line(item.stars + " stars" + topic, item.comment, item.at));
+        });
+      }
+    }
+
+    function line(who, text, at) {
+      const wrap = document.createElement("article");
+      wrap.className = "live-item";
+      const meta = document.createElement("p");
+      meta.className = "who";
+      const time = new Date(at).toLocaleString("en-ZA", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+      meta.textContent = who + " · " + time;
+      const body = document.createElement("p");
+      body.className = "q";
+      body.textContent = text;
+      wrap.append(meta, body);
+      return wrap;
+    }
+
+    async function pull() {
+      try {
+        const response = await fetch(ENDPOINT + "/json?poll=1&since=all");
+        if (!response.ok) return;
+        const raw = await response.text();
+        raw.split("\n").forEach((row) => {
+          if (!row.trim()) return;
+          try {
+            const event = JSON.parse(row);
+            if (event.event !== "message" || !event.message) return;
+            const payload = JSON.parse(event.message);
+            if (payload.v === 1) remember(payload);
+          } catch (err) { /* ignore other messages */ }
+        });
+        render();
+      } catch (err) { /* keep the last good board */ }
+    }
+
+    function applyMode() {
+      const inbox = location.hash === "#inbox";
+      document.body.classList.toggle("inbox", inbox);
+      document.title = inbox ? "Clinical Trial — Presenter board" : "Clinical Trial — Questions and rating";
+      document.getElementById("inbox-link").textContent = inbox ? "Back to the page" : "Presenter board";
+      document.getElementById("inbox-link").href = inbox ? "#" : "#inbox";
+    }
+
+    window.addEventListener("hashchange", applyMode);
+    applyMode();
+    pull();
+    setInterval(pull, 4000);
+  </script>
+</body>
+</html>
